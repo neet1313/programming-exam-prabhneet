@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Triangular Sum</title>
+</head>
+<body>
+
+<h1>Triangular Sum Demo</h1>
+
+<script>
+let triangularSum = function(nums) {
+    while (nums.length > 1) {
+        let newNums = [];
+        for (let i = 0; i < nums.length - 1; i++) {
+            newNums.push((nums[i] + nums[i + 1]) % 10);
+        }
+        nums = newNums;
+    }
+    return nums[0];
+};
+
+console.log(triangularSum([1, 2, 3, 4, 5]));
+</script>
+
+</body>
+</html>
