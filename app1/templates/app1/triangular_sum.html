@@ -52,6 +52,79 @@
             margin-bottom: 20px;
         }
 
+        .problem-description {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .problem-description h3 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .problem-description p {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .problem-description ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .problem-description li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .problem-description code {
+            background: #e8e8e8;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .examples {
+            margin-top: 15px;
+        }
+
+        .examples h4 {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 8px;
+            margin-top: 12px;
+        }
+
+        .examples pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 12px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .diagram {
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background: white;
+        }
+
         .complexity {
             background: #f5f5f5;
             padding: 15px;
@@ -169,14 +242,41 @@
 </head>
 <body>
     <div class="container">
-        <h1>Triangular Sum Calculator</h1>
+        <h1>🔺 Triangular Sum Calculator</h1>
         <p class="problem-info">
             <strong>LeetCode #2221</strong> (Medium)
         </p>
-        <p class="description">
-            Enter an array of digits (0-9) to calculate the triangular sum. 
-            The algorithm repeatedly creates new arrays by summing adjacent elements until one value remains.
-        </p>
+        
+        <div class="problem-description">
+            <h3>Problem Statement:</h3>
+            <p>You are given a 0-indexed integer array <code>nums</code>, where <code>nums[i]</code> is a digit between <code>0</code> and <code>9</code> (inclusive).</p>
+            <p>The triangular sum of <code>nums</code> is the value of the only element present in <code>nums</code> after the following process terminates:</p>
+            <ol>
+                <li>Let <code>nums</code> comprise of <code>n</code> elements. If <code>n == 1</code>, end the process. Otherwise, create a new 0-indexed integer array <code>newNums</code> of length <code>n - 1</code>.</li>
+                <li>For each index <code>i</code>, where <code>0 <= i < n - 1</code>, assign the value of <code>newNums[i]</code> as <code>(nums[i] + nums[i+1]) % 10</code>, where <code>%</code> denotes modulo operator.</li>
+                <li>Replace the array <code>nums</code> with <code>newNums</code>.</li>
+                <li>Repeat the entire process starting from step 1.</li>
+            </ol>
+            <p>Return the triangular sum of <code>nums</code>.</p>
+            
+            <div class="examples">
+                <h4>Example 1:</h4>
+                <div class="diagram">
+                    <img src="../../static/app1/images/triangular_sum_diagram.png" alt="Triangular Sum Process Diagram">
+                </div>
+                <pre>Input: nums = [1,2,3,4,5]
+Output: 8
+Explanation:
+The above diagram depicts the process from which we obtain the triangular sum of the array.</pre>
+                
+                <h4>Example 2:</h4>
+                <pre>Input: nums = [5]
+Output: 5
+Explanation:
+Since there is only one element in nums, the triangular sum is the value of that element itself.</pre>
+            </div>
+        </div>
+        
         <div class="complexity">
             <strong>Time Complexity:</strong> O(n²) - We perform n-1 + n-2 + ... + 1 operations<br>
             <strong>Space Complexity:</strong> O(1) - Array is modified in-place
