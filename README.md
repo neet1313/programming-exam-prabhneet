@@ -413,12 +413,6 @@ python manage.py createsuperuser
 
 ---
 
-## License
-
-This project is for educational purposes.
-
----
-
 ## Author
 
 Prabhneet Singh  
