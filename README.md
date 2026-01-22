@@ -1,5 +1,14 @@
-1. DJANGO PROJECT STRUCTURE
-Here's what we created:
+# Django Fundamentals Guide
+
+A comprehensive guide to understanding Django project structure, routing, and core concepts based on a practical implementation.
+
+---
+
+## 1. Django Project Structure
+
+Here's the complete project structure we created:
+
+```
 django/                          ← Main project folder
 ├── venv/                        ← Virtual environment (isolated Python)
 ├── manage.py                    ← Command-line tool for Django
@@ -25,22 +34,30 @@ django/                          ← Main project folder
     │   └── bloch.html
     ├── views.py
     └── urls.py
+```
 
-2. KEY CONCEPTS
-Project vs App
+---
 
-Project (mysite/) = The entire website
-App (pages/, app1/, app2/) = Individual features/modules
+## 2. Key Concepts
 
-Think of it like:
+### Project vs App
 
-Project = A shopping mall
-Apps = Individual stores (clothing store, food court, electronics)
+- **Project** (`mysite/`) = The entire website
+- **App** (`pages/`, `app1/`, `app2/`) = Individual features/modules
+
+**Analogy:**
+- **Project** = A shopping mall
+- **Apps** = Individual stores (clothing store, food court, electronics)
 
 Each app is self-contained and reusable.
 
-3. THE REQUEST-RESPONSE FLOW
-Here's what happens when you visit http://127.0.0.1:8000/app1/triangular-sum/:
+---
+
+## 3. The Request-Response Flow
+
+Here's what happens when you visit `http://127.0.0.1:8000/app1/triangular-sum/`:
+
+```
 1. Browser sends request
    ↓
 2. Django receives it at manage.py runserver
@@ -60,82 +77,108 @@ Here's what happens when you visit http://127.0.0.1:8000/app1/triangular-sum/:
 9. Returns HTML response to browser
    ↓
 10. Browser displays the page
+```
 
-4. URL ROUTING (The Phone Directory)
-Main Router (mysite/urls.py):
-pythonurlpatterns = [
+---
+
+## 4. URL Routing (The Phone Directory)
+
+### Main Router (`mysite/urls.py`)
+
+```python
+urlpatterns = [
     path('admin/', admin.site.urls),           # Django admin panel
     path('', include('pages.urls')),           # Homepage (empty path)
     path('app1/', include('app1.urls')),       # Triangular sum app
     path('app2/', include('app2.urls')),       # Bloch sphere app
 ]
-How it works:
+```
 
-path('', ...) → Matches http://127.0.0.1:8000/
-path('app1/', ...) → Matches http://127.0.0.1:8000/app1/...
-include() → Delegates to the app's own urls.py
+**How it works:**
+- `path('', ...)` → Matches `http://127.0.0.1:8000/`
+- `path('app1/', ...)` → Matches `http://127.0.0.1:8000/app1/...`
+- `include()` → Delegates to the app's own urls.py
 
+### App Router (`app1/urls.py`)
 
-App Router (app1/urls.py):
-pythonapp_name = 'app1'  # Namespace for URL names
+```python
+app_name = 'app1'  # Namespace for URL names
 
 urlpatterns = [
     path('triangular-sum/', views.triangular_sum, name='triangular_sum'),
 ]
-Full URL becomes:
+```
 
-Main: app1/
-App: triangular-sum/
-Result: http://127.0.0.1:8000/app1/triangular-sum/
+**Full URL becomes:**
+- Main: `app1/`
+- App: `triangular-sum/`
+- **Result:** `http://127.0.0.1:8000/app1/triangular-sum/`
 
-The name parameter:
+**The `name` parameter:**
+- Allows you to reference URLs by name instead of hardcoding
+- In templates: `{% url 'app1:triangular_sum' %}`
+- Much better than hardcoding `/app1/triangular-sum/`
 
-Allows you to reference URLs by name instead of hardcoding
-In templates: {% url 'app1:triangular_sum' %}
-Much better than hardcoding /app1/triangular-sum/
+---
 
+## 5. Views (The Brain)
 
-5. VIEWS (The Brain)
 Views are Python functions that handle requests and return responses.
-Simple View (pages/views.py):
-pythonfrom django.shortcuts import render
+
+### Simple View (`pages/views.py`)
+
+```python
+from django.shortcuts import render
 
 def home(request):
     return render(request, 'home.html')
-What happens:
+```
 
-Takes a request object (contains info about the HTTP request)
-render() combines a template with data
-Returns an HTML response
+**What happens:**
+1. Takes a `request` object (contains info about the HTTP request)
+2. `render()` combines a template with data
+3. Returns an HTML response
 
-View with Context (passing data to template):
-pythondef home(request):
+### View with Context (passing data to template)
+
+```python
+def home(request):
     context = {
         'title': 'My Django App',
         'apps': ['Triangular Sum', 'Bloch Sphere']
     }
     return render(request, 'home.html', context)
+```
+
 In the template, you can use:
-html<h1>{{ title }}</h1>
+
+```html
+<h1>{{ title }}</h1>
 {% for app in apps %}
     <p>{{ app }}</p>
 {% endfor %}
+```
 
-6. TEMPLATES (The Face)
+---
+
+## 6. Templates (The Face)
+
 Templates are HTML files with Django template language.
-Template Location:
+
+### Template Location
+
 Django looks for templates in:
+1. `app_name/templates/` folder
+2. `app_name/templates/app_name/` folder (better practice)
 
-app_name/templates/ folder
-app_name/templates/app_name/ folder (better practice)
+**Why the extra folder?**
+- Avoids name conflicts between apps
+- `app1/templates/app1/triangular_sum.html` is clearer than `app1/templates/triangular_sum.html`
 
-Why the extra folder?
+### Template Tags
 
-Avoids name conflicts between apps
-app1/templates/app1/triangular_sum.html is clearer than app1/templates/triangular_sum.html
-
-Template Tags:
-html<!-- Variables -->
+```html
+<!-- Variables -->
 {{ variable_name }}
 
 <!-- URL linking -->
@@ -154,10 +197,16 @@ html<!-- Variables -->
 <!-- Load static files -->
 {% load static %}
 <img src="{% static 'images/logo.png' %}">
+```
 
-7. SETTINGS.PY (The Control Center)
-INSTALLED_APPS:
-pythonINSTALLED_APPS = [
+---
+
+## 7. Settings.py (The Control Center)
+
+### INSTALLED_APPS
+
+```python
+INSTALLED_APPS = [
     'django.contrib.admin',      # Built-in: Admin panel
     'django.contrib.auth',       # Built-in: User authentication
     'django.contrib.contenttypes',
@@ -174,9 +223,10 @@ pythonINSTALLED_APPS = [
 
 ---
 
-## 8. HOW OUR APPS WORK TOGETHER
+## 8. How Our Apps Work Together
 
-### **Homepage Flow:**
+### Homepage Flow
+
 ```
 User visits: http://127.0.0.1:8000/
     ↓
@@ -191,7 +241,8 @@ Renders: pages/templates/home.html
 User sees: Homepage with links to app1 and app2
 ```
 
-### **Clicking on Triangular Sum:**
+### Clicking on Triangular Sum
+
 ```
 User clicks: {% url 'app1:triangular_sum' %}
     ↓
@@ -208,7 +259,7 @@ Renders: app1/templates/app1/triangular_sum.html
 
 ---
 
-## 9. NAMESPACE PATTERN
+## 9. Namespace Pattern
 
 Notice we used:
 - `app_name = 'app1'` in `app1/urls.py`
@@ -220,9 +271,10 @@ Notice we used:
 
 ---
 
-## 10. DJANGO MVT PATTERN
+## 10. Django MVT Pattern
 
 Django follows **MVT** (Model-View-Template):
+
 ```
 ┌─────────┐
 │  Model  │  ← Database (we didn't use this yet)
@@ -235,15 +287,19 @@ Django follows **MVT** (Model-View-Template):
 ┌────▼────────┐
 │  Template   │  ← Presentation (HTML files)
 └─────────────┘
-What we built:
+```
 
-Views: views.py files (business logic)
-Templates: HTML files (what users see)
-Models: Not used yet (would handle database)
+**What we built:**
+- **Views:** `views.py` files (business logic)
+- **Templates:** HTML files (what users see)
+- **Models:** Not used yet (would handle database)
 
+---
 
-11. COMMON DJANGO COMMANDS
-bash# Create new app
+## 11. Common Django Commands
+
+```bash
+# Create new app
 python manage.py startapp app_name
 
 # Run development server
@@ -261,7 +317,7 @@ python manage.py createsuperuser
 
 ---
 
-## 12. FILE RESPONSIBILITIES SUMMARY
+## 12. File Responsibilities Summary
 
 | File | Purpose | Example |
 |------|---------|---------|
@@ -274,7 +330,8 @@ python manage.py createsuperuser
 
 ---
 
-## 13. YOUR PROJECT FLOW DIAGRAM
+## 13. Project Flow Diagram
+
 ```
 ┌──────────────────────────────────────────────────────┐
 │                   User's Browser                      │
@@ -305,12 +362,64 @@ python manage.py createsuperuser
     │  home.html  │  │triangular_sum.html│ │bloch  │
     │             │  │                   │ │.html  │
     └─────────────┘  └───────────────────┘ └───────┘
+```
 
-14. KEY TAKEAWAYS
+---
 
-Apps are modular - Each app is independent and reusable
-URL routing is hierarchical - Main URLs → App URLs → Views
-Views connect everything - They're the glue between URLs and templates
-Templates use special syntax - {{ }} for variables, {% %} for logic
-Always register apps - in INSTALLED_APPS
-Use URL names - Never hardcode URLs, use {% url 'app:name' %}
+## 14. Key Takeaways
+
+1. **Apps are modular** - Each app is independent and reusable
+2. **URL routing is hierarchical** - Main URLs → App URLs → Views
+3. **Views connect everything** - They're the glue between URLs and templates
+4. **Templates use special syntax** - `{{ }}` for variables, `{% %}` for logic
+5. **Always register apps** - in `INSTALLED_APPS`
+6. **Use URL names** - Never hardcode URLs, use `{% url 'app:name' %}`
+
+---
+
+## Getting Started
+
+1. **Clone the repository** (or create a new Django project)
+2. **Create a virtual environment:**
+   ```bash
+   python -m venv venv
+   ```
+3. **Activate the virtual environment:**
+   - Windows: `venv\Scripts\activate`
+   - Mac/Linux: `source venv/bin/activate`
+4. **Install Django:**
+   ```bash
+   pip install django
+   ```
+5. **Run the development server:**
+   ```bash
+   python manage.py runserver
+   ```
+6. **Visit:** `http://127.0.0.1:8000/`
+
+---
+
+## Project Components
+
+### App 1: Triangular Sum Calculator
+- **URL:** `/app1/triangular-sum/`
+- **Description:** Calculate triangular sums with step-by-step visualization
+- **LeetCode Problem:** #2221 (Medium)
+
+### App 2: Interactive Bloch Sphere
+- **URL:** `/app2/bloch/`
+- **Description:** Quantum state visualization on the Bloch sphere
+- **Features:** Interactive sliders, real-time state updates
+
+---
+
+## License
+
+This project is for educational purposes.
+
+---
+
+## Author
+
+Prabhneet Singh  
+Lecturer: Fernando Almaguer Angeles
