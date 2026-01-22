@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -240,25 +241,32 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>🔺 Triangular Sum Calculator</h1>
         <p class="problem-info">
             <strong>LeetCode #2221</strong> (Medium)
         </p>
-        
+
         <div class="problem-description">
             <h3>Problem Statement:</h3>
-            <p>You are given a 0-indexed integer array <code>nums</code>, where <code>nums[i]</code> is a digit between <code>0</code> and <code>9</code> (inclusive).</p>
-            <p>The triangular sum of <code>nums</code> is the value of the only element present in <code>nums</code> after the following process terminates:</p>
+            <p>You are given a 0-indexed integer array <code>nums</code>, where <code>nums[i]</code> is a digit between
+                <code>0</code> and <code>9</code> (inclusive).</p>
+            <p>The triangular sum of <code>nums</code> is the value of the only element present in <code>nums</code>
+                after the following process terminates:</p>
             <ol>
-                <li>Let <code>nums</code> comprise of <code>n</code> elements. If <code>n == 1</code>, end the process. Otherwise, create a new 0-indexed integer array <code>newNums</code> of length <code>n - 1</code>.</li>
-                <li>For each index <code>i</code>, where <code>0 <= i < n - 1</code>, assign the value of <code>newNums[i]</code> as <code>(nums[i] + nums[i+1]) % 10</code>, where <code>%</code> denotes modulo operator.</li>
+                <li>Let <code>nums</code> comprise of <code>n</code> elements. If <code>n == 1</code>, end the process.
+                    Otherwise, create a new 0-indexed integer array <code>newNums</code> of length <code>n - 1</code>.
+                </li>
+                <li>For each index <code>i</code>, where <code>0 <= i < n - 1</code>, assign the value of
+                    <code>newNums[i]</code> as <code>(nums[i] + nums[i+1]) % 10</code>, where <code>%</code> denotes
+                    modulo operator.</li>
                 <li>Replace the array <code>nums</code> with <code>newNums</code>.</li>
                 <li>Repeat the entire process starting from step 1.</li>
             </ol>
             <p>Return the triangular sum of <code>nums</code>.</p>
-            
+
             <div class="examples">
                 <h4>Example 1:</h4>
                 <div class="diagram">
@@ -268,7 +276,7 @@
 Output: 8
 Explanation:
 The above diagram depicts the process from which we obtain the triangular sum of the array.</pre>
-                
+
                 <h4>Example 2:</h4>
                 <pre>Input: nums = [5]
 Output: 5
@@ -276,7 +284,7 @@ Explanation:
 Since there is only one element in nums, the triangular sum is the value of that element itself.</pre>
             </div>
         </div>
-        
+
         <div class="complexity">
             <strong>Time Complexity:</strong> O(n²) - We perform n-1 + n-2 + ... + 1 operations<br>
             <strong>Space Complexity:</strong> O(1) - Array is modified in-place
@@ -284,12 +292,7 @@ Since there is only one element in nums, the triangular sum is the value of that
 
         <div class="input-group">
             <label for="numsInput">Enter Array (comma-separated digits):</label>
-            <input 
-                type="text" 
-                id="numsInput" 
-                placeholder="e.g., 1,2,3,4,5"
-                autocomplete="off"
-            >
+            <input type="text" id="numsInput" placeholder="e.g., 1,2,3,4,5" autocomplete="off">
             <div class="hint">Enter digits between 0-9, separated by commas</div>
         </div>
 
@@ -300,13 +303,17 @@ Since there is only one element in nums, the triangular sum is the value of that
             <div class="result-value" id="resultValue"></div>
             <div id="steps" class="steps"></div>
         </div>
+
+        <div class="container">
+            <a href="/" style="text-decoration: none; color: #333;">← Back to Home</a>
+        </div>
     </div>
 
     <script>
-        var triangularSum = function(nums) {
+        var triangularSum = function (nums) {
             for (let i = 1; i < nums.length; i++) {
                 for (let j = 0; j < nums.length - i; j++) {
-                    nums[j] = (nums[j] + nums[j+1]) % 10;
+                    nums[j] = (nums[j] + nums[j + 1]) % 10;
                 }
             }
             return nums[0];
@@ -329,7 +336,7 @@ Since there is only one element in nums, the triangular sum is the value of that
 
             // Parse input
             const nums = input.split(',').map(s => s.trim());
-            
+
             // Validate each number
             for (let num of nums) {
                 if (num === '' || isNaN(num) || parseInt(num) < 0 || parseInt(num) > 9) {
@@ -356,14 +363,14 @@ Since there is only one element in nums, the triangular sum is the value of that
         function showSteps(nums) {
             const stepsDiv = document.getElementById('steps');
             const originalNums = nums.slice();
-            
+
             stepsDiv.innerHTML = '<div class="result-label">Step-by-step:</div>';
             stepsDiv.innerHTML += `<div class="step">Start: [${originalNums.join(', ')}]</div>`;
 
             let step = 1;
             for (let i = 1; i < originalNums.length; i++) {
                 for (let j = 0; j < nums.length - i; j++) {
-                    nums[j] = (nums[j] + nums[j+1]) % 10;
+                    nums[j] = (nums[j] + nums[j + 1]) % 10;
                 }
                 const display = nums.slice(0, nums.length - i);
                 stepsDiv.innerHTML += `<div class="step">Step ${step}: [${display.join(', ')}]</div>`;
@@ -375,18 +382,19 @@ Since there is only one element in nums, the triangular sum is the value of that
             const resultDiv = document.getElementById('result');
             const resultValue = document.getElementById('resultValue');
             const stepsDiv = document.getElementById('steps');
-            
+
             stepsDiv.innerHTML = '';
             resultDiv.classList.add('error', 'show');
             resultValue.textContent = message;
         }
 
         // Allow Enter key to submit
-        document.getElementById('numsInput').addEventListener('keypress', function(e) {
+        document.getElementById('numsInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 calculate();
             }
         });
     </script>
 </body>
+
 </html>
